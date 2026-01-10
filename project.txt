@@ -1,0 +1,46 @@
+eCourse is a modern, responsive, full-stack e-learning platform built with:
+React.js (Frontend)
+Laravel (Backend API)
+Axios (API Client)
+React Router (Navigation)
+Context API (Auth & Course State Management)
+Users can:
+
+✔ Browse courses
+✔ Filter by categories
+✔ View course details
+✔ Watch lessons
+✔ Take quizzes
+✔ Track progress
+✔ Download certificates
+✔ Create courses (instructor mode)
+✔ Login / Register
+✔ Manage profile
+-Implemented Protected Routes so only loggedin users can access:
+My Courses,Profile,Certificates,Create Course,Quiz
+built authentication system using:
+AuthContext.js/useAuth.js
+It handles:Login,Logout,Saving user in localStorage,Making the user available everywhere
+-CourseContext.js provides:
+all courses,categories,fetching logic,getCourseById
+This improves performance and avoids duplicate API calls.
+-Reusable Custom Hooks
+useAuth() → returns login, logout, user
+useCourses() → returns all course data
+useProgress() → returns progress tracking
+axiosclient.js attaches tokens automatically and handles errors.
+-UI/UX Design Features
+
+You built a very modern UI using:
+Glassmorphism/Soft shadows/Rounded cards/Animated buttons/Gradient backgrounds
+Category chips/Search bar/Fully responsive layout/Dark;Light mode switch
+Your navbar is fixed, glossy, and animated like Apple’s interface.
+Your course cards and grids look like Udemy.
+Your profile page mimics Coursera student dashboard
+
+-Scripts:
+✔ UI logic (click, inputs, buttons)
+✔ State management (useState, useContext)
+✔ Axios requests (HTTP calls)
+✔ Routing (switch page)
+✔ Displaying UI

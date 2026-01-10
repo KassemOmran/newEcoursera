@@ -1,0 +1,148 @@
+Project Overview:
+
+We built a RESTful backend API using Laravel 12 + MySQL for an Online Course Platform, designed to work with a React frontend.
+The backend is frontend-driven in features but frontend-independent in code.
+Authentication & Security (COMPLETED)
+Technology
+Laravel Sanctum
+Token-based authentication (Bearer tokens)
+
+Implemented Features
+User Registration
+User Login
+User Logout
+Get Current User (/api/me)
+Route protection using auth:sanctum
+
+Endpoints
+POST   /api/register
+POST   /api/login
+POST   /api/logout
+GET    /api/me
+Security
+Password hashing
+Token revocation on logout
+Protected API routes
+Validation for all inputs
+
+🗄️ Database & Schema Design (COMPLETED)
+Database
+MySQL
+Clean relational design
+
+Foreign key constraints enforced
+
+Tables Created
+Table	Purpose
+users	Users
+courses	Courses
+lessons	Course lessons
+enrollments	User-course relation
+progresses	Lesson completion tracking
+quizzes	Course quizzes
+certificates	Completion certificates
+personal_access_tokens	Sanctum tokens
+
+All migrations:
+Run cleanly
+Ordered correctly
+Reversible
+
+📚 Courses & Lessons (COMPLETED)
+Features
+Browse courses
+View course details
+Create courses (protected)
+Lessons attached to courses
+
+Endpoints
+GET    /api/courses
+GET    /api/courses/{id}
+POST   /api/courses
+
+Relationships
+
+Course ➝ hasMany Lessons
+
+Lesson ➝ belongsTo Course
+
+🧾 Enrollments (COMPLETED)
+Features
+User enrolls in course
+Prevent duplicate enrollment
+Fetch user’s enrolled courses
+
+Endpoints
+POST   /api/courses/{id}/enroll
+GET    /api/my-courses
+
+Relationships
+User ↔ Course (Many-to-Many via enrollments)
+
+📊 Progress Tracking (COMPLETED)
+Features
+
+Mark lessons as completed
+Calculate course progress percentage
+Progress tracked per user, per lesson
+
+Endpoints
+POST   /api/lessons/{id}/complete
+GET    /api/courses/{id}/progress
+
+Logic
+
+Progress % = completed lessons / total lessons
+
+Uses progresses table
+
+🎓 Certificates (COMPLETED)
+Features
+Certificate issued when course reaches 100%
+Prevent duplicate certificates
+Fetch user certificates
+
+Endpoints
+POST   /api/courses/{id}/certificate
+GET    /api/my-certificates
+
+Rules
+
+One certificate per user per course
+
+Issued only after full completion
+
+🧠 Architecture & Best Practices (COMPLETED)
+Structure
+
+API Controllers (App\Http\Controllers\API)
+Models with relationships
+Clean separation of concerns
+Laravel 12 routing via bootstrap/app.php
+Middleware
+Sanctum middleware
+Throttling
+
+JSON-only API behavior
+
+🧪 Testing & Verification (COMPLETED)
+
+Tested all endpoints using Postman
+
+Verified:
+
+Auth flow
+Token protection
+Database writes
+Progress calculations
+Certificate issuance
+
+📈 Final Completion Status
+Area	Status
+Authentication	✅ 100%
+Database Design	✅ 100%
+Courses & Lessons	✅ 100%
+Enrollments	✅ 100%
+Progress Tracking	✅ 100%
+Certificates	✅ 100%
+API Architecture	✅ 100%

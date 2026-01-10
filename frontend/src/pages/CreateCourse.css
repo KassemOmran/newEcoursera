@@ -1,0 +1,57 @@
+.create-container {
+  width: 90%;
+  margin: auto;
+  padding-top: 120px;
+}
+
+.create-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.create-subtitle {
+  margin-bottom: 18px;
+  color: var(--text-muted);
+}
+
+.create-form {
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-soft);
+  padding: 20px;
+  max-width: 600px;
+}
+
+.create-field {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.create-field label {
+  margin-bottom: 6px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.create-field input,
+.create-field select,
+.create-field textarea {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+}
+
+.create-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent-color);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}

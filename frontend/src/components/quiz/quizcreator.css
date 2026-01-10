@@ -1,0 +1,27 @@
+.quiz-creator {
+  background: var(--card-bg);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border-radius: 14px;
+  margin-top: 20px;
+}
+
+.quiz-creator input,
+.quiz-creator select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.quiz-creator button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #4e73df;
+  color: white;
+  border: none;
+  cursor: pointer;
+}

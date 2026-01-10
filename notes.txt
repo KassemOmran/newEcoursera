@@ -1,0 +1,41 @@
+->FULLSTACK:
+State Management - AuthContext for global user state
+API Integration - Real HTTP calls to Laravel
+Error Handling - Network errors, validation errors
+Loading States - User feedback during requests
+Local Storage - Persisting login sessions
+Navigation - Redirect after login
+Security - Token management
+
+a> pages/ just display
+hierarchy:Get-ChildItem backend, frontend -Recurse -Directory |
+Where-Object { $_.FullName -notmatch "node_modules|vendor|dist|build" } |
+Select-Object FullName > tree.txt
+in powershell
+->import App.css inside App.js
+->index.js is the entry point
+->App.js is the main component(Whole website UI)
+;;src/api is responsible for connecting frontend with backend
+Design:FUTURISTIC TECH UI(Blue Neon + Sleek Cards + Animations)
+if (!user) return <Navigate to="/login" />; ->protecting
+npm install axios
+npm install react-router-dom
+
+Axios (API Client)
+React Router (Navigation)
+Context API (Auth & Course State Management)
+
+Global State Injection
+
+Enable Laravel IDE Helper:->composer require --dev barryvdh/laravel-ide-helper
+
+generating key:php artisan key:generate
+
+DB:
+composer require doctrine/dbal
+composer require illuminate/database
+clear cache:php artisan optimize:clear
+install sanctum(for api auth):composer require laravel/sanctum
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
+kernel.php|Handler.php|Authenticate.php must exist

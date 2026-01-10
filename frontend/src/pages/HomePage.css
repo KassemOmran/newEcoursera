@@ -1,0 +1,128 @@
+.home-container {
+  width: 90%;
+  margin: auto;
+  padding-top: 120px;
+}
+
+/* HERO SECTION */
+.hero-section {
+  background: linear-gradient(135deg, #4e73df, #3f5ec0);
+  padding: 80px 20px;
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: var(--shadow-strong);
+}
+
+.hero-section h1 {
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.hero-section p {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.hero-search {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.hero-search input {
+  width: 320px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+.hero-search button {
+  padding: 12px 20px;
+  background: #fff;
+  border: none;
+  color: #333;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* CATEGORY SECTION */
+.category-section {
+  margin-top: 40px;
+}
+
+.category-section h2 {
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 15px;
+}
+
+.category-card {
+  background: var(--card-bg);
+  padding: 18px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  color: var(--text-color);
+  transition: 0.25s;
+}
+
+.category-card:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: translateY(-3px);
+}
+
+/* FEATURED */
+.featured-section {
+  margin-top: 40px;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.featured-card {
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 15px;
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+
+.featured-card img {
+  width: 100%;
+  height: 160px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.featured-card h3 {
+  margin: 10px 0;
+  color: var(--text-color);
+}
+
+.featured-card p {
+  color: var(--text-muted);
+}
+
+.view-btn {
+  margin-top: 8px;
+  padding: 10px 15px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}

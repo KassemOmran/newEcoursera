@@ -1,0 +1,41 @@
+/api
+axiosclient.js → Axios configuration (baseURL, headers, token)
+auth.js → login, register, logout API
+courses.js → fetch courses, search, enroll
+quiz.js → quiz questions, submit answers
+certificates.js → fetch certificates
+enrollment.js → enroll & progress tracking
+/components
+auth/ → LoginForm, RegisterForm, ForgotPassword
+common/ → Navbar, Footer, Loader
+course/ → CourseCard, LessonPlayer
+quiz/ → Quiz UI components
+dashboard/ → Instructor and Student dashboards
+/Context
+AuthContext.js → stores user login state
+CourseContext.js → stores all courses & categories
+/Hooks
+useAuth.js → returns login(), logout(), user
+useCourses.js → returns courses, categories
+useProgress.js → returns progress & tracking
+/pages
+Full screens that user visits
+/Routes
+AppRoutes.js → main routing system
+ProtectedRoute.js → blocks pages unless logged in
+/utils
+formatters.js → format dates, names, etc
+validators.js → validate forms
+constants.js → store fixed values
+-App.js->Components
+-index.js->Entry point
+SUMMARY:
+/api talks to backend
+/components holds reusable UI
+/pages holds full screens
+/context stores global data
+/hooks gives reusable logic
+/routes controls navigation
+/utils holds helper functions
+App.js = Controls the app
+index.js = Starts the app

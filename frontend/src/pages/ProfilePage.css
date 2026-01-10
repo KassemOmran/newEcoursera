@@ -1,0 +1,74 @@
+.profile-container {
+  width: 90%;
+  margin: auto;
+  padding-top: 120px;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* LEFT PROFILE CARD */
+.profile-card {
+  flex: 1;
+  min-width: 280px;
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 14px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-soft);
+}
+
+.profile-card img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-card h2 {
+  margin-top: 10px;
+  color: var(--text-color);
+}
+
+.email {
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.edit-btn {
+  padding: 10px 15px;
+  background: var(--accent-color);
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+/* RIGHT SETTINGS PANEL */
+.settings-card {
+  flex: 2;
+  min-width: 280px;
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-soft);
+}
+
+.settings-card h3 {
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+.setting-item {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.setting-item:hover {
+  background: var(--accent-color);
+  color: white;
+}

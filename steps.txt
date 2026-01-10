@@ -1,0 +1,19 @@
+-enable sqlsrv
+-install sanctum 
+-enable sanctum in kernel
+protected $middlewareGroups = [
+    'api' => [
+        \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    ],
+];
+
+-setup cors for reaxt 
+'allowed_origins' => ['http://localhost:3000'],
+
+-Create Controllers 
+-php artisan migrate
+-Create AuthController: php artisan make:controller AuthController
+-create api.php
+-Test API with postman
+POST http://localhost:8000/api/register

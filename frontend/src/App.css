@@ -1,0 +1,178 @@
+/* =======================================
+   THEME VARIABLES - LIGHT MODE
+   ======================================= */
+:root {
+  --bg-color: #f5f7fb;
+  --bg-color-alt: #ffffff;
+  --text-color: #111827;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --danger-color: #ef4444;
+
+  --card-bg: #ffffff;
+  --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+/* =======================================
+   THEME VARIABLES - DARK MODE
+   ======================================= */
+[data-theme="dark"] {
+  --bg-color: #020617;
+  --bg-color-alt: #020617;
+  --text-color: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border-color: #1f2937;
+  --accent-color: #60a5fa;
+  --accent-hover: #3b82f6;
+
+  --card-bg: #020617;
+  --shadow-soft: 0 0 35px rgba(37, 99, 235, 0.3);
+}
+
+/* =======================================
+   GLOBAL RESET
+   ======================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  background: radial-gradient(circle at top, #e5edff 0, var(--bg-color) 38%);
+  color: var(--text-color);
+  transition: background var(--transition-normal), color var(--transition-normal);
+}
+
+/* Dark mode background tweak */
+[data-theme="dark"] body {
+  background: radial-gradient(circle at top, #0f172a 0, #020617 40%);
+}
+
+/* =======================================
+   APP LAYOUT
+   ======================================= */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 90px auto 40px auto; /* space for navbar + footer */
+  padding: 0 16px;
+}
+
+/* =======================================
+   GENERIC UTILITY CLASSES
+   ======================================= */
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-soft);
+  padding: 20px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+    border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color);
+}
+
+[data-theme="dark"] .card:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: var(--accent-color);
+  color: white;
+  transition: background var(--transition-fast), transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.25);
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  box-shadow: none;
+}
+
+.btn-outline:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+/* Typography helpers */
+.page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* Simple fade-in animation for pages */
+.fade-in {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive container tweaks */
+@media (max-width: 768px) {
+  .main-content {
+    margin: 85px auto 24px auto;
+    padding: 0 12px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+}

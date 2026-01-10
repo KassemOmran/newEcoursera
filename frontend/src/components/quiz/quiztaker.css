@@ -1,0 +1,21 @@
+.quiz-container {
+  padding: 20px;
+}
+
+.question-card {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.question-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #4e73df;
+  color: white;
+  cursor: pointer;
+}
