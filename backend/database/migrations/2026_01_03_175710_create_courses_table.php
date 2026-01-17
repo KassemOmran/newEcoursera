@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('thumbnail')->nullable();
+            $table->string('category');
+            $table->decimal('price',8,2)->default(0);
             $table->timestamps();
         });
     }

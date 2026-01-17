@@ -21,9 +21,11 @@ export function CourseProvider({ children }) {
   async function fetchAllCourses() {
     try {
       const data = await courseAPI.getAllCourses();
-      setCourses(data);
+    console.log("API response:", data); // debug
+    setCourses(Array.isArray(data) ? data : data.courses || []);
     } catch (err) {
       console.error("Error loading courses", err);
+      setCourses([]);
     }
   }
 

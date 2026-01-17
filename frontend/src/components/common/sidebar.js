@@ -17,12 +17,20 @@ export default function Sidebar() {
             My Courses
           </NavLink>
           <NavLink
-            to="/create-course"
+            to="/instructor/create"
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
           >
             Create Course
+          </NavLink>
+          <NavLink
+            to="/instructor"
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
+            Instructor Dashboard
           </NavLink>
           <NavLink
             to="/certificates"

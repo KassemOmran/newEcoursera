@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./coursebuilder.css";
+
 
 export default function CourseBuilder({ onAddLesson }) {
   const [title, setTitle] = useState("");

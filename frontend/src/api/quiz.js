@@ -1,7 +1,7 @@
 import axiosClient from "./axiosclient";
-z
+
 export async function createQuiz(courseId, quizData) {
-  return await axiosClient.post(`/courses/${courseId}/quiz`, quizData);
+  return await axiosClient.post(`/courses/${courseId}/quizzes`, quizData);
 }
 
 export async function getQuiz(quizId) {

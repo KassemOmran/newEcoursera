@@ -14,6 +14,8 @@ class Course extends Model
         'title',
         'description',
         'thumbnail',
+        'category',
+        'price'
     ];
 
     public function lessons()
@@ -32,6 +34,9 @@ public function students()
         'enrollments'
     );
 }
+public function instructor(){
+    return $this->belongsTo(User::class,'user_id');
+}
 public function progresses()
 {
     return $this->hasMany(Progress::class);
@@ -39,6 +44,10 @@ public function progresses()
 public function certificate()
 {
     return $this->hasOne(Certificate::class);
+}
+public function quizzes()
+{
+    return $this->hasMany(Quiz::class);
 }
 
 }

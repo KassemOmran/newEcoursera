@@ -17,7 +17,11 @@ export default function CourseView() {
     setLoading(true);
     try {
       const data = await getCourse(id); // data = { course, lessons }
+      console.log(data);
+      
       setCourse(data.course);
+      
+      
       setLessons(data.lessons || []);
       setSelectedLesson(data.lessons?.[0] || null);
     } catch (err) {
@@ -38,10 +42,10 @@ export default function CourseView() {
   return (
     <div className="course-view-container">
       <div className="course-header">
-        <img src={course.image} alt={course.title} />
+        <img src={course.thumbnail} alt="" />
         <div>
           <h1>{course.title}</h1>
-          <p className="course-instructor">By {course.instructor}</p>
+          <p className="course-instructor">By {course.instructor.name}</p>
           <p className="course-description">{course.description}</p>
           <button className="enroll-btn">Enroll Now</button>
         </div>

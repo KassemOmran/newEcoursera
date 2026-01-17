@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import "./AppRoutes.css";
 import HomePage from "../pages/HomePage";
 import ExploreCourses from "../pages/ExploreCourses";
 import CourseView from "../pages/CourseView";
@@ -14,12 +15,20 @@ import ForgotPassword from "../components/auth/ForgotPassword";
 import ProtectedRoute from "./ProtectedRoute";
 import Head from "../components/common/head";
 import Foot from "../components/common/foot";
+import Sidebar from "../components/common/sidebar";
+import InstructorDashboard from "../pages/InstructorDashboard";
+import QuizBuilder from "../components/quiz/QuizBuilder";
 
 function AppRoutes({ theme, toggleTheme }) {
   return (
     <>
       <Head theme={theme} toggleTheme={toggleTheme} />
+      <div className="app-layout">
+
+      
+      <Sidebar className="sidebar-wrapper"/>
       <main className="main-content">
+        
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/explore" element={<ExploreCourses />} />
@@ -27,6 +36,17 @@ function AppRoutes({ theme, toggleTheme }) {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/forget-pass" element={<ForgotPassword />} />
+          <Route path="/instructor" element={<ProtectedRoute>
+                <InstructorDashboard/>
+              </ProtectedRoute>}/>
+          <Route path="/instructor/create" element={<ProtectedRoute>
+                <CreateCourse/>
+              </ProtectedRoute>} />
+              <Route path="/instructor/courses/:courseId/quizzes" element={<ProtectedRoute>
+                <QuizBuilder/>
+              </ProtectedRoute>} />
+
+
           <Route
             path="/my-courses"
             element={
@@ -35,14 +55,7 @@ function AppRoutes({ theme, toggleTheme }) {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/create-course"
-            element={
-              <ProtectedRoute>
-                <CreateCourse />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="/quiz/:quizId"
             element={
@@ -70,6 +83,7 @@ function AppRoutes({ theme, toggleTheme }) {
           <Route path="*" element={<div className="fade-in">Page Not Found</div>} />
         </Routes>
       </main>
+      </div>
       <Foot />
     </>
   );
