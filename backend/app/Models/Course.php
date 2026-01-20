@@ -23,31 +23,29 @@ class Course extends Model
         return $this->hasMany(Lesson::class);
     }
     public function enrollments()
-{
-    return $this->hasMany(Enrollment::class);
-}
+    {
+       return $this->hasMany(Enrollment::class,'course_id');
+    }
 
-public function students()
-{
-    return $this->belongsToMany(
-        User::class,
-        'enrollments'
-    );
-}
-public function instructor(){
-    return $this->belongsTo(User::class,'user_id');
-}
-public function progresses()
-{
-    return $this->hasMany(Progress::class);
-}
-public function certificate()
-{
-    return $this->hasOne(Certificate::class);
-}
-public function quizzes()
-{
-    return $this->hasMany(Quiz::class);
-}
+    public function students()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'enrollments'
+        );
+    }
+    public function instructor()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    public function progresses()
+    {
+        return $this->hasMany(Progress::class);
+    }
+    public function certificate()
+    {
+        return $this->hasOne(Certificate::class);
+    }
+    
 
 }

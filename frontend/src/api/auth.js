@@ -1,17 +1,39 @@
 import axiosClient from "./axiosclient";
 
-export async function login(email, password) {
-  return await axiosClient.post("/login", { email, password });
+/**
+ * Login user
+ * @param {string} email
+ * @param {string} password
+ */
+export function login(email, password) {
+  return axiosClient.post("/login", {
+    email,
+    password,
+  });
 }
 
-export async function register(data) {
-  return await axiosClient.post("/register", data);
+/**
+ * Register user
+ * data must include:
+ * - name
+ * - email
+ * - password
+ * - password_confirmation
+ */
+export function register(data) {
+  return axiosClient.post("/register", data);
 }
 
-export async function logout() {
-  return await axiosClient.post("/logout");
+/**
+ * Logout current user
+ */
+export function logout() {
+  return axiosClient.post("/logout");
 }
 
-export async function getProfile() {
-  return await axiosClient.get("/profile");
+/**
+ * Get authenticated user profile
+ */
+export function getProfile() {
+  return axiosClient.get("/me");
 }

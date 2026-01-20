@@ -7,10 +7,10 @@ use Termwind\Question;
 
 class Quiz extends Model
 {
-   protected $fillable = ['course_id'];
+   protected $fillable = ['lesson_id','title'];
 
-   public function course(){
-    return $this->belongsTo(Course::class);
+   public function lesson(){
+    return $this->belongsTo(Lesson::class);
    }
    public function questions(){
     return $this->hasMany(QuizQuestion::class);

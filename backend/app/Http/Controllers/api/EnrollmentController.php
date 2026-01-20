@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Course;
+use App\Models\Progress;
 use Illuminate\Http\Request;
 
 class EnrollmentController extends Controller
@@ -33,9 +34,37 @@ class EnrollmentController extends Controller
     }
 
     public function myCourses(Request $request)
-    {
-        return response()->json(
-            $request->user()->enrolledCourses()->with('lessons')->get()
-        );
-    }
+{
+    $user = $request->user();
+
+    $courses = $user->enrolledCourses()->with('lessons')->get();
+
+    $courses->transform(function ($course) use ($user) {
+        $totalLessons = $course->lessons->count();
+
+        $completedLessons = Progress::where([
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+            'completed' => true,
+        ])->count();
+
+        $course->progress = $totalLessons > 0
+            ? round(($completedLessons / $totalLessons) * 100)
+            : 0;
+
+        return $course;
+    });
+
+    return response()->json($courses);
+}
+    public function status(Request $request, $courseId)
+{
+    $user = $request->user();
+
+    $isEnrolled = $user->enrolledCourses()->where('course_id', $courseId)->exists();
+
+    return response()->json([
+        'enrolled' => $isEnrolled,
+    ]);
+}
 }

@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Http;
+namespace App\Console;
 
-use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-class Kernel extends HttpKernel
+class Kernel extends ConsoleKernel
 {
-    protected $middlewareGroups = [
-        'web' => [
-            // your web middleware here
-        ],
+    protected function schedule(Schedule $schedule): void
+    {
+        // $schedule->command('inspire')->hourly();
+    }
 
-        'api' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
-    ];
+    protected function commands(): void
+    {
+        $this->load(__DIR__.'/Commands');
+
+        require base_path('routes/console.php');
+    }
 }

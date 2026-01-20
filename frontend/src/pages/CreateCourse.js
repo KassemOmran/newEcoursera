@@ -1,41 +1,49 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import axiosClient from "../api/axiosclient";
 import "./CreateCourse.css";
-import { createCourse } from "../api/courses";
 
 export default function CreateCourse() {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Programming");
   const [description, setDescription] = useState("");
-  const [price,setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [thumbnail, setThumbnail] = useState(
     "https://source.unsplash.com/600x400/?reactjs,code"
   );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  if (!isAuthenticated) {
+    navigate("/login");
+    return null;
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
-      const response = await createCourse({
+      const course = await axiosClient.post("/instructor/courses", {
         title,
         category,
         description,
-        image: thumbnail,
-        price,
+        thumbnail,
+        price: Number(price),
       });
-      console.log("CreateCourse result:", response);
 
-      alert(
-        `Course created:\nTitle: ${response.title}\nCategory: ${response.category}`
-      );
-
-      // Reset form
-      setTitle("");
-      setCategory("Programming");
-      setDescription("");
-      setThumbnail("https://source.unsplash.com/600x400/?reactjs,code");
+      alert(`Course created: ${course.title}`);
+      navigate("/instructor/dashboard");
     } catch (err) {
       console.error(err);
-      alert("Error creating course");
+      setError(err?.message || "Failed to create course");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -46,12 +54,13 @@ export default function CreateCourse() {
         Fill in the basic details for your course.
       </p>
 
+      {error && <p className="auth-error">{error}</p>}
+
       <form onSubmit={handleSubmit} className="create-form">
         <div className="create-field">
           <label>Course Title</label>
           <input
             type="text"
-            placeholder="e.g. Advanced React Patterns"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -76,18 +85,17 @@ export default function CreateCourse() {
           <label>Description</label>
           <textarea
             rows="4"
-            placeholder="Describe what students will learn..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
+
         <div className="create-field">
           <label>Price (USD)</label>
           <input
             type="number"
             step="0.01"
-            placeholder="e.g. 49.99"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
@@ -98,11 +106,9 @@ export default function CreateCourse() {
           <label>Thumbnail URL</label>
           <input
             type="text"
-            placeholder="Paste an image URL"
             value={thumbnail}
             onChange={(e) => setThumbnail(e.target.value)}
           />
-          <small>Preview:</small>
           <img
             src={thumbnail}
             alt="thumbnail preview"
@@ -110,7 +116,9 @@ export default function CreateCourse() {
           />
         </div>
 
-        <button className="create-btn">Save Course</button>
+        <button className="create-btn" disabled={loading}>
+          {loading ? "Saving..." : "Save Course"}
+        </button>
       </form>
     </div>
   );

@@ -13,9 +13,10 @@ class CourseController extends Controller
         return Course::with('instructor')->get();
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $course = Course::with(['instructor'], ['lessons'])->findOrFail($id);
+
         return response()->json([
             'course' => $course,
             'lessons' => $course->lessons
@@ -45,7 +46,7 @@ class CourseController extends Controller
     }
     public function myCourses()
     {
-        return Course::with('lessons')
+        return Course::with('lessons.quiz')
             ->where('user_id', auth()->id())
             ->get();
     }

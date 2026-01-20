@@ -1,82 +1,96 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axiosClient from "../api/axiosclient";
 import "./QuizPage.css";
 
 export default function QuizPage() {
   const { quizId } = useParams();
+
+  const [quiz, setQuiz] = useState(null);
+  const [answers, setAnswers] = useState({});
   const [current, setCurrent] = useState(0);
-  const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const questions = [
-    {
-      id: 1,
-      question: "What is React?",
-      options: [
-        "A CSS framework",
-        "A JavaScript library for building UIs",
-        "A database",
-        "A web server",
-      ],
-      answer: 1,
-    },
-    {
-      id: 2,
-      question: "What hook is used for state?",
-      options: ["useProps", "useState", "useEffect", "useClass"],
-      answer: 1,
-    },
-  ];
+  useEffect(() => {
+    async function fetchQuiz() {
+      try {
+        const data = await axiosClient.get(`/quizzes/${quizId}`);
+        setQuiz(data);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load quiz");
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  const currentQ = questions[current];
+    fetchQuiz();
+  }, [quizId]);
 
-  function nextQuestion() {
-    if (current < questions.length - 1) {
-      setCurrent((c) => c + 1);
-      setSelected(null);
-    } else {
-      // Calculate score
-      let s = 0;
-      // super simple: just fake scoring
-      // real: track answers in array
-      s = 1; // just to show result
-      setScore(`${s} / ${questions.length}`);
+  function selectOption(questionId, optionId) {
+    setAnswers({ ...answers, [questionId]: optionId });
+  }
+
+  async function submitQuiz() {
+    try {
+      const result = await axiosClient.post(
+        `/quizzes/${quizId}/submit`,
+        { answers }
+      );
+      setScore(result.score);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit quiz");
     }
   }
 
+  if (loading) return <div className="quiz-container">Loading...</div>;
+  if (error) return <div className="quiz-container">{error}</div>;
+
+  const question = quiz.questions[current];
+
   return (
     <div className="quiz-container">
-      <h1 className="quiz-title">Quiz #{quizId}</h1>
+      <h1 className="quiz-title">{quiz.title}</h1>
 
-      {score ? (
+      {score !== null ? (
         <div className="quiz-result card">
           <h2>Your Score</h2>
-          <p>{score}</p>
+          <p>{score}%</p>
         </div>
       ) : (
         <div className="quiz-card">
           <p className="quiz-question">
-            Q{current + 1}. {currentQ.question}
+            Q{current + 1}. {question.question}
           </p>
 
           <div className="quiz-options">
-            {currentQ.options.map((opt, index) => (
+            {question.options.map((opt) => (
               <div
-                key={index}
+                key={opt.id}
                 className={
-                  selected === index
+                  answers[question.id] === opt.id
                     ? "quiz-option selected"
                     : "quiz-option"
                 }
-                onClick={() => setSelected(index)}
+                onClick={() => selectOption(question.id, opt.id)}
               >
-                {opt}
+                {opt.text}
               </div>
             ))}
           </div>
 
-          <button className="quiz-next-btn" onClick={nextQuestion}>
-            {current === questions.length - 1 ? "Finish" : "Next"}
+          <button
+            className="quiz-next-btn"
+            onClick={() =>
+              current < quiz.questions.length - 1
+                ? setCurrent(current + 1)
+                : submitQuiz()
+            }
+          >
+            {current < quiz.questions.length - 1 ? "Next" : "Submit"}
           </button>
         </div>
       )}

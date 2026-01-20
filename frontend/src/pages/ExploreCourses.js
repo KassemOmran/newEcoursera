@@ -1,23 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { CourseContext } from "../context/CourseContext";
+import axiosClient from "../api/axiosclient";
 import "./ExploreCourses.css";
 
 export default function ExploreCourses() {
-  const { courses, categories } = useContext(CourseContext);
+  const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState(["All"]);
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
-  const filtered = courses.filter(course => {
+
+  useEffect(() => {
+    async function fetchCourses() {
+      try {
+        const data = await axiosClient.get("/courses");
+        setCourses(data || []);
+
+        // Build categories from backend data
+        const uniqueCategories = [
+          "All",
+          ...new Set(data.map((c) => c.category)),
+        ];
+        setCategories(uniqueCategories);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load courses");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCourses();
+  }, []);
+
+  const filtered = courses.filter((course) => {
     const matchesCategory =
       selectedCategory === "All" || course.category === selectedCategory;
+
     const matchesQuery =
       course.title.toLowerCase().includes(query.toLowerCase()) ||
-      course.instructor.toLowerCase().includes(query.toLowerCase());
+      course.instructor?.name
+        ?.toLowerCase()
+        .includes(query.toLowerCase());
+
     return matchesCategory && matchesQuery;
   });
 
+  if (loading) {
+    return <div className="explore-container">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="explore-container">{error}</div>;
+  }
 
   return (
     <div className="explore-container">
@@ -48,10 +86,13 @@ export default function ExploreCourses() {
 
         {filtered.map((course) => (
           <div key={course.id} className="course-card-e">
-            <img src={course.thumbnail} alt="" />
+            <img src={course.thumbnail} alt={course.title} />
             <h3>{course.title}</h3>
-            <p className="instructor">{course.instructor.name}</p>
+            <p className="instructor">
+              {course.instructor?.name || "Unknown Instructor"}
+            </p>
             <p className="price">${course.price}</p>
+
             <button
               className="view-btn"
               onClick={() => navigate(`/course/${course.id}`)}

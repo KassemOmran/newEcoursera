@@ -25,5 +25,9 @@ class Lesson extends Model
     {
         return $this->hasMany(Progress::class);
     }
+    public function quiz()
+    {
+        return $this->hasOne(Quiz::class);
+    }
 
 }

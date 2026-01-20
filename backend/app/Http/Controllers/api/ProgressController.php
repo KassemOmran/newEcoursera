@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Lesson;
 use App\Models\Progress;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class ProgressController extends Controller
@@ -31,31 +32,42 @@ class ProgressController extends Controller
         ]);
     }
 
-    // Get course progress %
+    // Get course progress details
     public function courseProgress(Request $request, $courseId)
     {
         $user = $request->user();
 
-        $totalLessons = $user->enrolledCourses()
+        // Check if user is enrolled in this course
+        $course = $user->enrolledCourses()
             ->where('courses.id', $courseId)
-            ->first()
-            ?->lessons()
-            ->count() ?? 0;
+            ->first();
 
-        if ($totalLessons === 0) {
-            return response()->json(['progress' => 0]);
+        if (!$course) {
+            return response()->json([
+                'enrolled' => false,
+                'progress' => 0,
+                'completed_lessons' => [],
+                'total_lessons' => 0
+            ]);
         }
+
+        $totalLessons = $course->lessons()->count();
 
         $completedLessons = Progress::where([
             'user_id' => $user->id,
             'course_id' => $courseId,
             'completed' => true,
-        ])->count();
+        ])->pluck('lesson_id'); 
 
-        $percentage = round(($completedLessons / $totalLessons) * 100);
+        $percentage = $totalLessons > 0
+            ? round(($completedLessons->count() / $totalLessons) * 100)
+            : 0;
 
         return response()->json([
-            'progress' => $percentage
+            'enrolled' => true,
+            'progress' => $percentage,
+            'completed_lessons' => $completedLessons,
+            'total_lessons' => $totalLessons,
         ]);
     }
 }

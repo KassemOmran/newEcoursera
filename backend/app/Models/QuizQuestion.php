@@ -13,4 +13,7 @@ class QuizQuestion extends Model
     public function quizQuestionOptions(){
         return $this->hasMany(QuizQuestionOption::class);
     }
+    public function options(){
+        return $this->quizQuestionOptions();
+    }
 }

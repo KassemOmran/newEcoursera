@@ -5,7 +5,7 @@ export async function getAllCourses() {
 }
 
 export async function getCourse(id) {
-  return await axiosClient.get(`/courses/${id}`);
+  return axiosClient.get(`/courses/${id}`);
 }
 
 export async function createCourse(courseData) {

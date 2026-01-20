@@ -24,7 +24,7 @@ class LessonController extends Controller
 
     $lesson = $course->lessons()->create([
         'title' => $request->title,
-        'video' => $request->video,
+        'video_url' => $request->video,
         'order' => $nextOrder,
     ]);
 
@@ -62,15 +62,12 @@ class LessonController extends Controller
     }
 
     // DELETE LESSON
-    public function destroy($courseId, $lessonId)
+    public function destroy($lessonId)
     {
-        $course = Course::where('user_id', auth()->id())->findOrFail($courseId);
-        $lesson = $course->lessons()->findOrFail($lessonId);
-
+        $lesson = Lesson::findOrFail($lessonId);
         $lesson->delete();
 
-        return response()->json([
-            'message' => 'Lesson deleted successfully'
-        ]);
+        return response()->json(['message' => 'Lesson deleted successfully']);
     }
+
 }

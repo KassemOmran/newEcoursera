@@ -8,25 +8,39 @@ export default function RegisterForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const { login } = useAuth();
 
   async function handleRegister(e) {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
       const res = await registerApi({
         name,
         email,
         password,
+        password_confirmation: password,
       });
+
       localStorage.setItem("ecourse_token", res.token);
       login(res.user);
-
       navigate("/");
-    } catch (error) {
-      console.error(error);
-      alert("Registration failed");
+    } catch (err) {
+      console.error(err);
+
+      if (err?.errors) {
+        const firstError = Object.values(err.errors)[0]?.[0];
+        setError(firstError || "Registration failed");
+      } else {
+        setError("Registration failed");
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -35,34 +49,49 @@ export default function RegisterForm() {
       <div className="auth-card">
         <h1 className="auth-title">Create Account</h1>
 
+        {error && <p className="auth-error">{error}</p>}
+
         <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <div className="auth-input-group">
+            <label>Full Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className="auth-input-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button>Sign Up</button>
+          <div className="auth-input-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button className="auth-btn" disabled={loading}>
+            {loading ? "Creating account..." : "Sign Up"}
+          </button>
         </form>
-        <p>
-          Already have an account? <Link to="/login">Login</Link>
+
+        <p className="auth-bottom-text">
+          Already have an account?{" "}
+          <Link className="auth-link" to="/login">
+            Login
+          </Link>
         </p>
       </div>
     </div>

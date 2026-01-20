@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./HomePage.css";
+import python from "../assets/images/python.jpg";
+import laravel from "../assets/images/laravel.jpg";
+import react from "../assets/images/react.jpg"
 
 export default function HomePage() {
   const [featured, setFeatured] = useState([]);
@@ -12,19 +15,19 @@ export default function HomePage() {
         id: 1,
         title: "React for Beginners",
         instructor: "John Smith",
-        image: "https://source.unsplash.com/600x400/?reactjs,code",
+        image: react,
       },
       {
         id: 2,
         title: "Full Laravel Course",
         instructor: "Sarah Johnson",
-        image: "https://source.unsplash.com/600x400/?laravel,php",
+        image: laravel,
       },
       {
         id: 3,
         title: "Python Programming",
         instructor: "Michael Jordan",
-        image: "https://source.unsplash.com/600x400/?python,programming",
+        image: python,
       },
     ]);
   }, []);
