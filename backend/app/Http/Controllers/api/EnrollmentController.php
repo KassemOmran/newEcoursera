@@ -34,37 +34,64 @@ class EnrollmentController extends Controller
     }
 
     public function myCourses(Request $request)
-{
-    $user = $request->user();
+    {
+        $user = $request->user();
 
-    $courses = $user->enrolledCourses()->with('lessons')->get();
+        $courses = $user->enrolledCourses()->with('lessons')->get();
 
-    $courses->transform(function ($course) use ($user) {
-        $totalLessons = $course->lessons->count();
+        $courses->transform(function ($course) use ($user) {
+            $totalLessons = $course->lessons->count();
 
-        $completedLessons = Progress::where([
-            'user_id' => $user->id,
-            'course_id' => $course->id,
-            'completed' => true,
-        ])->count();
+            $completedLessons = Progress::where([
+                'user_id' => $user->id,
+                'course_id' => $course->id,
+                'completed' => true,
+            ])->count();
 
-        $course->progress = $totalLessons > 0
-            ? round(($completedLessons / $totalLessons) * 100)
-            : 0;
+            $course->progress = $totalLessons > 0
+                ? round(($completedLessons / $totalLessons) * 100)
+                : 0;
 
-        return $course;
-    });
+            return $course;
+        });
 
-    return response()->json($courses);
-}
+        return response()->json($courses);
+    }
     public function status(Request $request, $courseId)
+    {
+        $user = $request->user();
+
+        $isEnrolled = $user->enrolledCourses()->where('course_id', $courseId)->exists();
+
+        return response()->json([
+            'enrolled' => $isEnrolled,
+        ]);
+    }
+    public function unenroll(Request $request, $courseId)
 {
     $user = $request->user();
+    $course = Course::findOrFail($courseId);
 
-    $isEnrolled = $user->enrolledCourses()->where('course_id', $courseId)->exists();
+    if (!$user->enrolledCourses()->where('course_id', $courseId)->exists()) {
+        return response()->json([
+            'message' => 'You are not enrolled in this course'
+        ], 404);
+    }
+
+    // Remove enrollment record
+    Enrollment::where('user_id', $user->id)
+              ->where('course_id', $courseId)
+              ->delete();
+
+    // Optionally clear progress
+    Progress::where('user_id', $user->id)
+            ->where('course_id', $courseId)
+            ->delete();
 
     return response()->json([
-        'enrolled' => $isEnrolled,
+        'message' => 'Successfully unenrolled from course',
+        'course_id' => $course->id,
     ]);
 }
+
 }

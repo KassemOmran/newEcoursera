@@ -45,9 +45,13 @@ export default function CertificatesPage() {
       <div className="cert-grid">
         {certificates.map((cert) => (
           <div key={cert.id} className="cert-card">
-            <h3>{cert.course_title}</h3>
+            <h3>{cert.course.title}</h3>
             <p className="cert-date">
-              Completed on {cert.completed_at}
+              Completed on {new Date(cert.issued_at).toLocaleDateString("en-EU", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+})}
             </p>
 
             {cert.pdf_url ? (

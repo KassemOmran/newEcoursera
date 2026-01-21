@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link,useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axiosClient from "../api/axiosclient";
 import useAuth from "../hooks/useAuth";
 import LessonPlayer from "../components/course/LessonPlayer";
@@ -21,36 +21,35 @@ export default function CourseView() {
   const [isEnrolled, setIsEnrolled] = useState(false);
 
   useEffect(() => {
-  async function loadData() {
-    try {
-      const courseData = await axiosClient.get(`/courses/${id}`);
-      setCourse(courseData.course);
-      setLessons(courseData.lessons || []);
-      setSelectedLesson(courseData.lessons?.[0] || null);
+    async function loadData() {
+      try {
+        const courseData = await axiosClient.get(`/courses/${id}`);
+        setCourse(courseData.course);
+        setLessons(courseData.lessons || []);
+        setSelectedLesson(courseData.lessons?.[0] || null);
 
-      if (isAuthenticated) {
-        try {
-          const status = await axiosClient.get(`/courses/${id}/status`);
-          setIsEnrolled(status.enrolled);
+        if (isAuthenticated) {
+          try {
+            const status = await axiosClient.get(`/courses/${id}/status`);
+            setIsEnrolled(status.enrolled);
 
-          const progress = await axiosClient.get(`/courses/${id}/progress`);
-          setCompletedLessons(progress.completed_lessons || []);
-        } catch {
-          setIsEnrolled(false);
-          setCompletedLessons([]);
+            const progress = await axiosClient.get(`/courses/${id}/progress`);
+            setCompletedLessons(progress.completed_lessons || []);
+          } catch {
+            setIsEnrolled(false);
+            setCompletedLessons([]);
+          }
         }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load course");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load course");
-    } finally {
-      setLoading(false);
     }
-  }
 
-  loadData();
-}, [id, isAuthenticated]);
-
+    loadData();
+  }, [id, isAuthenticated]);
 
   async function handleEnroll() {
     if (!isAuthenticated) {
@@ -70,12 +69,27 @@ export default function CourseView() {
       setEnrolling(false);
     }
   }
+  async function handleUnenroll() {
+    setEnrolling(true);
+    try {
+      await axiosClient.delete(`/courses/${id}/enroll`);
+      alert("You have unenrolled from this course.");
+      setIsEnrolled(false);
+      setCompletedLessons([]);
+      setSelectedLesson(null);
+    } catch (err) {
+      console.error(err);
+      alert("Unenrollment failed");
+    } finally {
+      setEnrolling(false);
+    }
+  }
 
   async function markCompleted(lessonId) {
     try {
       await axiosClient.post(`/lessons/${lessonId}/complete`);
       setCompletedLessons((prev) =>
-        prev.includes(lessonId) ? prev : [...prev, lessonId]
+        prev.includes(lessonId) ? prev : [...prev, lessonId],
       );
     } catch (err) {
       console.error(err);
@@ -101,8 +115,7 @@ export default function CourseView() {
   if (error) return <div className="course-view-container">{error}</div>;
 
   const courseCompleted =
-    lessons.length > 0 &&
-    completedLessons.length === lessons.length;
+    lessons.length > 0 && completedLessons.length === lessons.length;
 
   return (
     <div className="course-view-container">
@@ -116,13 +129,21 @@ export default function CourseView() {
           </p>
           <p className="course-description">{course.description}</p>
 
-          {!isEnrolled && (
+          {!isEnrolled ? (
             <button
               className="enroll-btn"
               disabled={enrolling}
               onClick={handleEnroll}
             >
               {enrolling ? "Enrolling..." : "Enroll Now"}
+            </button>
+          ) : (
+            <button
+              className="unenroll-btn"
+              disabled={enrolling}
+              onClick={handleUnenroll}
+            >
+              {enrolling ? "Unenrolling..." : "Unenroll"}
             </button>
           )}
         </div>
@@ -138,9 +159,7 @@ export default function CourseView() {
               key={lesson.id}
               className={`lesson-item ${
                 selectedLesson?.id === lesson.id ? "active" : ""
-              } ${
-                completedLessons.includes(lesson.id) ? "completed" : ""
-              }`}
+              } ${completedLessons.includes(lesson.id) ? "completed" : ""}`}
               onClick={() => setSelectedLesson(lesson)}
             >
               {lesson.title}
@@ -150,36 +169,42 @@ export default function CourseView() {
         </div>
 
         <div className="lesson-player">
-          <LessonPlayer lesson={selectedLesson} />
+          {isEnrolled ? (
+            <>
+              <LessonPlayer lesson={selectedLesson} />
 
-          {isEnrolled &&
-            selectedLesson &&
-            !completedLessons.includes(selectedLesson.id) && (
-              <button
-                className="complete-btn"
-                onClick={() => markCompleted(selectedLesson.id)}
-              >
-                Mark as Completed
-              </button>
-            )}
-          {isEnrolled &&
-            selectedLesson &&completedLessons.includes(selectedLesson.id)&& (
-              <Link to={`/lessons/${selectedLesson.id}/quiz`}>
-                        <button
-                          className="dashboard-btn"
-                          style={{ marginTop: "10px" }}
-                        >
-                          Take Quiz
-                        </button>
-                        </Link>
-            )
+              {selectedLesson &&
+                !completedLessons.includes(selectedLesson.id) && (
+                  <button
+                    className="complete-btn"
+                    onClick={() => markCompleted(selectedLesson.id)}
+                  >
+                    Mark as Completed
+                  </button>
+                )}
 
-          }
+              {selectedLesson &&
+                completedLessons.includes(selectedLesson.id) && (
+                  <Link to={`/lessons/${selectedLesson.id}/quiz`}>
+                    <button
+                      className="dashboard-btn"
+                      style={{ marginTop: "10px" }}
+                    >
+                      Take Quiz
+                    </button>
+                  </Link>
+                )}
+            </>
+          ) : (
+            <p className="locked-message">
+              You must enroll to watch lessons and take quizzes.
+            </p>
+          )}
         </div>
       </div>
 
       {/* CERTIFICATE */}
-      {isAuthenticated && courseCompleted && (
+      {isAuthenticated && isEnrolled && courseCompleted && (
         <div style={{ marginTop: "30px" }}>
           <button
             className="complete-btn"

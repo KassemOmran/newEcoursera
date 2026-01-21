@@ -73,7 +73,7 @@ export default function HomePage() {
         <div className="featured-grid">
           {featured.map((c) => (
             <div key={c.id} className="featured-card">
-              <img src={c.image} alt="" />
+              <img src={c.thumbnail} alt="" />
               <h3>{c.title}</h3>
               <p>{c.instructor}</p>
               <button

@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\API;
+use Illuminate\Support\Facades\Storage;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\Course;
@@ -29,6 +31,21 @@ class CertificateController extends Controller
                 'message' => 'Course not completed'
             ], 403);
         }
+        $pdf = Pdf::loadView('certificate', compact('user', 'course'));
+
+    $filename = "certificate-{$user->id}-{$course->id}.pdf";
+    $path = "certificates/{$filename}";
+
+    // Ensure directory exists
+    Storage::disk('public')->makeDirectory('certificates');
+
+// Save PDF
+Storage::disk('public')->put($path, $pdf->output());
+
+
+    $pdfUrl = asset("storage/{$path}");
+
+
 
         $certificate = Certificate::firstOrCreate(
             [
@@ -36,9 +53,11 @@ class CertificateController extends Controller
                 'course_id' => $courseId,
             ],
             [
+                'pdf_url'=> $pdfUrl,
                 'issued_at' => now(),
             ]
         );
+        
 
         return response()->json([
             'message' => 'Certificate issued',

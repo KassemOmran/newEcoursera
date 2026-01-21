@@ -7,14 +7,18 @@ import "./CreateCourse.css";
 export default function CreateCourse() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
+  const defaultThumbnails = {
+    Programming: "/thumbnails/programming-thumbnail.jpg",
+    Design: "/thumbnails/design-thumbnail.jpg",
+    Business: "/thumbnails/business-thumbnail.jpg",
+    Marketing: "/thumbnails/marketing-thumbnail.jpg",
+    "IT & Software": "/thumbnails/it-thumbnail.jpg",
+  };
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Programming");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [thumbnail, setThumbnail] = useState(
-    "https://source.unsplash.com/600x400/?reactjs,code"
-  );
+  const [thumbnail, setThumbnail] = useState(defaultThumbnails["Programming"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -38,7 +42,7 @@ export default function CreateCourse() {
       });
 
       alert(`Course created: ${course.title}`);
-      navigate("/instructor/dashboard");
+      navigate("/instructor");
     } catch (err) {
       console.error(err);
       setError(err?.message || "Failed to create course");
@@ -71,7 +75,11 @@ export default function CreateCourse() {
           <label>Category</label>
           <select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              const selected = e.target.value;
+              setCategory(selected);
+              setThumbnail(defaultThumbnails[selected]);
+            }}
           >
             <option>Programming</option>
             <option>Design</option>
@@ -107,7 +115,8 @@ export default function CreateCourse() {
           <input
             type="text"
             value={thumbnail}
-            onChange={(e) => setThumbnail(e.target.value)}
+    onChange={(e) => setThumbnail(e.target.value)} 
+            
           />
           <img
             src={thumbnail}

@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Enrollment
     Route::post('/courses/{id}/enroll', [EnrollmentController::class, 'enroll']);
+    Route::delete('/courses/{id}/enroll', [EnrollmentController::class, 'unenroll']);
     Route::get('/my-courses', [EnrollmentController::class, 'myCourses']);
     Route::get('/courses/{course}/status', [EnrollmentController::class, 'status']);
 
@@ -58,7 +59,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Quizzes
     Route::post('/lessons/{id}/quiz', [QuizController::class, 'store']);
-
     Route::get('/lessons/{id}/quiz', [QuizController::class, 'show']);
     Route::delete('/lessons/{id}/quiz', [QuizController::class, 'destroy']);
     Route::post('/quizzes/{id}/submit', [QuizController::class,'submit']);

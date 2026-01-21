@@ -22,11 +22,9 @@
 }
 
 .cert-card {
-  background: var(--card-bg);
-  border-radius: 14px;
-  padding: 16px;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column; /* stack children top to bottom */
+  justify-content: flex-start;
 }
 
 .cert-card h3 {
@@ -41,10 +39,14 @@
 
 .cert-btn {
   margin-top: 10px;
+  width: fit-content;
+  text-decoration: none;
   padding: 8px 14px;
   background: var(--accent-color);
   color: white;
   border-radius: 8px;
   border: none;
   cursor: pointer;
+  display: inline-block; /* keep it in flow */
+  position: static;      /* reset if something else overrides */
 }
