@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import axiosClient from "../api/axiosclient";
 import "./ExploreCourses.css";
 
 export default function ExploreCourses() {
   const [courses, setCourses] = useState([]);
   const [categories, setCategories] = useState(["All"]);
-  const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const location = useLocation();
+  const [query, setQuery] = useState(location.state?.query || "");
 
   const navigate = useNavigate();
 

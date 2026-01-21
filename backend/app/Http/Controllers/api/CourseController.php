@@ -78,4 +78,10 @@ class CourseController extends Controller
             'message' => 'Course deleted successfully'
         ]);
     }
+    public function featured()
+    {
+        $courses = Course::with('instructor')->take(6)->get();
+
+        return response()->json($courses);
+    }
 }
